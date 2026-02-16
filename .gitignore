@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+
+# Data and Secrets
+data/
+cookies.json
+*.db
+*.sqlite
+
+# IDEs
+.vscode/
+.idea/
+
+# Logs
+*.log
