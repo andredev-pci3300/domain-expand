@@ -29,6 +29,17 @@ class CacheManager:
                     count INTEGER DEFAULT 0
                 )
             ''')
+            # Table for metrics history
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS metrics_history (
+                    date DATE PRIMARY KEY,
+                    followers INTEGER,
+                    following INTEGER,
+                    tweets INTEGER,
+                    new_followers INTEGER DEFAULT 0,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
             conn.commit()
 
     @contextmanager
@@ -38,6 +49,45 @@ class CacheManager:
             yield conn
         finally:
             conn.close()
+
+    def log_metrics(self, followers, following, tweets):
+        """Logs daily metrics and returns growth since yesterday."""
+        today = datetime.date.today().isoformat()
+        yesterday = (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
+        
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            
+            # Get yesterday's metrics
+            cursor.execute('SELECT followers FROM metrics_history WHERE date = ?', (yesterday,))
+            result = cursor.fetchone()
+            
+            prev_followers = result[0] if result else followers
+            new_followers = followers - prev_followers
+            
+            # Insert or Update today's metrics
+            # SQLite ON CONFLICT DO UPDATE requires newer version, using REPLACE for simplicity or separate check
+            # Better: Upsert syntax
+            cursor.execute('''
+                INSERT INTO metrics_history (date, followers, following, tweets, new_followers)
+                VALUES (?, ?, ?, ?, ?)
+                ON CONFLICT(date) DO UPDATE SET
+                    followers=excluded.followers,
+                    following=excluded.following,
+                    tweets=excluded.tweets,
+                    new_followers=excluded.new_followers
+            ''', (today, followers, following, tweets, new_followers))
+            
+            conn.commit()
+            return new_followers
+
+    def get_todays_report_status(self):
+        """Checks if report was already generated today."""
+        today = datetime.date.today().isoformat()
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT 1 FROM metrics_history WHERE date = ?', (today,))
+            return cursor.fetchone() is not None
 
     def is_tweet_processed(self, tweet_id):
         """Check if a tweet has already been processed."""

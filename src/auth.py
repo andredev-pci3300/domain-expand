@@ -7,7 +7,11 @@ COOKIES_PATH = "data/cookies.json"
 
 class TwitterClient:
     def __init__(self):
-        self.client = Client('en-US')
+        # Use a modern User-Agent to avoid Cloudflare blocks
+        self.client = Client(
+            language='en-US',
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
+        )
 
     async def login(self):
         """Loads cookies if available, otherwise expects environment variables for login."""
@@ -62,4 +66,29 @@ class TwitterClient:
         except Exception as e:
             print(f"Error creating tweet: {e}")
             return False
+
+    async def get_my_metrics(self):
+        """Fetches current user metrics."""
+        try:
+            user = await self.client.user()
+            return {
+                "followers": user.followers_count,
+                "following": user.following_count,
+                "statuses": user.statuses_count,
+                "name": user.name,
+                "screen_name": user.screen_name
+            }
+        except Exception as e:
+            print(f"Error fetching metrics: {e}")
+            return None
+
+    async def save_session(self):
+        """Saves the current session cookies to file."""
+        try:
+            self.client.save_cookies(COOKIES_PATH)
+            print("Session cookies saved.")
+        except Exception as e:
+            print(f"Error saving cookies: {e}")
+
+
 

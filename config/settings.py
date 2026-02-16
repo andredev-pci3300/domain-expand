@@ -5,7 +5,8 @@ load_dotenv()
 
 # API Keys
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-CRYPTOPANIC_API_KEY = os.getenv("CRYPTOPANIC_API_KEY") # Add to .env
+CRYPTOPANIC_API_KEY = os.getenv("CRYPTOPANIC_API_KEY")
+GOOGLE_SCRIPT_URL = os.getenv("GOOGLE_SCRIPT_URL") # Alerts and Reports
 
 # Target Accounts (for manual checks)
 TARGET_ACCOUNTS = ["saylor", "APompliano", "pomp", "bitcoin", "DocumentingBTC", "TuurDemeester", "Gladstein"]

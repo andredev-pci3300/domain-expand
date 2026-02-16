@@ -11,9 +11,8 @@ class ForYouMonitor:
         # or 'Home' depending on account settings. 
         # We will assume get_timeline() gives us the algorithmic feed.
         try:
-            tweets = await self.client.client.get_timeline(count=count, tweet_type='Recommended') 
-            # tweet_type='Recommended' forces 'For You' usually, but 'Top' is also a valid param in some endpoints.
-            # Twikit documentation says get_timeline() gets "Home" timeline.
+            # Twikit defaults to 'Home' timeline (For You / Following based on user setting)
+            tweets = await self.client.client.get_timeline(count=count) 
             return tweets
         except Exception as e:
             print(f"Error fetching For You timeline: {e}")
