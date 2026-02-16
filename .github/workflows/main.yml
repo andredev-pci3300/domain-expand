@@ -1,11 +1,13 @@
 name: X Bot Automation
 
+# ON PAUSE: Bot actions are disabled until further notice.
 on:
-  schedule:
-    # Run every hour between 7:00 and 23:00 GMT-3 (10:00 - 02:00 UTC approx)
-    # Adjust cron for UTC. GMT-3 07:00 is 10:00 UTC.
-    - cron: '0 10-23 * * *' 
-  workflow_dispatch:
+  # schedule:
+  #   - cron: '0 10-23 * * *' 
+  # workflow_dispatch:
+  push:
+    branches: [ "master-disabled" ] # Changing to a non-existent branch to prevent runs
+
 
 jobs:
   run-bot:
