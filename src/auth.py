@@ -8,9 +8,9 @@ COOKIES_PATH = "data/cookies.json"
 
 class TwitterClient:
     def __init__(self):
-        # Use FIXED User-Agent matching the one used in login_playwright.py
-        # Randomizing it causes 401/403 errors when session is bound to a specific UA/Fingerprint
-        self.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
+        # Use FIXED User-Agent matching the GitHub Actions Environment (Linux)
+        # Using Windows UA on Linux runner creates a fingerprint mismatch (TCP vs HTTP) which Cloudflare blocks.
+        self.user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
         
         print(f"Using Fixed User-Agent: {self.user_agent}")
         self.client = Client(
