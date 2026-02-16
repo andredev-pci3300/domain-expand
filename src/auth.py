@@ -67,7 +67,7 @@ class TwitterClient:
         """Replies to a tweet."""
         try:
             # Twikit's create_tweet with reply_to argument
-            await self.client.create_tweet(text=text, reply_to_tweet_id=tweet_id)
+            await self.client.create_tweet(text=text, reply_to=tweet_id)
             print(f"Replied to {tweet_id}")
             return True
         except Exception as e:

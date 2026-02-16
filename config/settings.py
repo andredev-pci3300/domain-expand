@@ -13,7 +13,7 @@ TARGET_ACCOUNTS = ["saylor", "APompliano", "pomp", "bitcoin", "DocumentingBTC", 
 
 # Time Window (GMT-3)
 START_HOUR = 7
-END_HOUR = 24  # Extended for testing purposes (usually 23)
+END_HOUR = 23
 
 # Limits
 DAILY_ACTION_LIMIT_MIN = 15
