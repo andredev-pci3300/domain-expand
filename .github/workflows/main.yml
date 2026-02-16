@@ -16,6 +16,7 @@ jobs:
       TWITTER_USERNAME: ${{ secrets.TWITTER_USERNAME }} # Optional if using cookies
       TWITTER_EMAIL: ${{ secrets.TWITTER_EMAIL }}       # Optional
       TWITTER_PASSWORD: ${{ secrets.TWITTER_PASSWORD }} # Optional
+      GOOGLE_SCRIPT_URL: ${{ secrets.GOOGLE_SCRIPT_URL }} # Required for notifications
 
     steps:
     - uses: actions/checkout@v4
