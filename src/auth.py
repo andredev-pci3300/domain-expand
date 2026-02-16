@@ -2,22 +2,44 @@ from twikit import Client
 import json
 import os
 import asyncio
+from fake_useragent import UserAgent
 
 COOKIES_PATH = "data/cookies.json"
 
 class TwitterClient:
     def __init__(self):
-        # Use a modern User-Agent to avoid Cloudflare blocks
+        # Use a real/random User-Agent to avoid Cloudflare blocks
+        try:
+            ua = UserAgent(browsers=['chrome', 'edge'])
+            user_agent = ua.random
+        except:
+             user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
+        
+        print(f"Using User-Agent: {user_agent}")
         self.client = Client(
             language='en-US',
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
+            user_agent=user_agent
         )
 
     async def login(self):
         """Loads cookies if available, otherwise expects environment variables for login."""
         if os.path.exists(COOKIES_PATH):
-            print("Loading cookies...")
+            print(f"Loading cookies from {COOKIES_PATH}...")
             self.client.load_cookies(COOKIES_PATH)
+            
+            # Explicitly verify/set CSRF token if possible
+            cookies = self.client.get_cookies()
+            if 'ct0' in cookies:
+                self.client.set_x_csrf_token(cookies['ct0'])
+                print("CSRF Token (ct0) set manually.")
+            else:
+                print("WARNING: ct0 cookie not found. Auth may fail.")
+                
+            if 'auth_token' in cookies:
+                print("Auth Token detected.")
+            else:
+                print("WARNING: auth_token cookie not found.")
+
         else:
             print("No cookies found. Login required.")
             username = os.getenv("TWITTER_USERNAME")
