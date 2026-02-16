@@ -7,3 +7,5 @@ fake-useragent>=1.5.1
 feedparser>=6.0.0
 
 pytz
+
+requests
