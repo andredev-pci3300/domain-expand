@@ -12,7 +12,7 @@ class GroqClient:
             # For robustness, we might want to log this but raise for now
             print("Warning: GROQ_API_KEY not found in environment")
         self.client = AsyncGroq(api_key=api_key)
-        self.model = "openai/gpt-oss-120b"
+        self.model = "llama-3.3-70b-versatile"
 
     async def generate_reply(self, tweet_text, author_name):
         """Generates a reply using the defined persona asynchronously."""
@@ -37,6 +37,7 @@ class GroqClient:
 
     async def _call_llm(self, user_prompt):
         try:
+            print(f"DEBUG: Calling LLM with model {self.model}...")
             chat_completion = await self.client.chat.completions.create(
                 messages=[
                     {
@@ -54,7 +55,9 @@ class GroqClient:
                 temperature=0.7,
                 max_tokens=280,
             )
-            return chat_completion.choices[0].message.content.strip()
+            content = chat_completion.choices[0].message.content.strip()
+            print("DEBUG: LLM Content Generated.")
+            return content
         except Exception as e:
             print(f"Error generating content: {e}")
             return None
