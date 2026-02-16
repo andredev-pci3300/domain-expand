@@ -27,11 +27,11 @@ class TwitterClient:
             print(f"Loading cookies from {COOKIES_PATH}...")
             self.client.load_cookies(COOKIES_PATH)
             
-            # Explicitly verify/set CSRF token if possible
+            # Explicitly verify headers
             cookies = self.client.get_cookies()
             if 'ct0' in cookies:
-                self.client.set_x_csrf_token(cookies['ct0'])
-                print("CSRF Token (ct0) set manually.")
+                # Twikit sets this automatically usually
+                print("CSRF Token (ct0) found in cookies.")
             else:
                 print("WARNING: ct0 cookie not found. Auth may fail.")
                 
