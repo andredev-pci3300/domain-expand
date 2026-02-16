@@ -8,15 +8,9 @@ COOKIES_PATH = "data/cookies.json"
 
 class TwitterClient:
     def __init__(self):
-        # Use FIXED User-Agent matching the GitHub Actions Environment (Linux)
-        # Using Windows UA on Linux runner creates a fingerprint mismatch (TCP vs HTTP) which Cloudflare blocks.
-        self.user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
-        
-        print(f"Using Fixed User-Agent: {self.user_agent}")
-        self.client = Client(
-            language='en-US',
-            user_agent=self.user_agent
-        )
+        # Reverting to Twikit's default User-Agent handling
+        # Manual overrides might be breaking header consistency
+        self.client = Client(language='en-US')
 
     async def login(self):
         """Loads cookies if available, otherwise expects environment variables for login."""
