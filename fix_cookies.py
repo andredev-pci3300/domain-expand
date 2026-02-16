@@ -40,7 +40,7 @@ def fix_cookies():
         cookie_dict = cookies
 
     # Always generate and print Base64 if we have a dictionary
-    if 'auth_token' in cookie_dict and 'ct0' in cookie_dict:
+    if 'auth_token' in cookie_dict and 'ct0' in cookie_dict and 'twid' in cookie_dict:
         import base64
         # Save to ensure it's on disk in the correct format before encoding
         with open(OUTPUT_PATH, 'w', encoding='utf-8') as f:

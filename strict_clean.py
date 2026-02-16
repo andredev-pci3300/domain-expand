@@ -6,7 +6,7 @@ def strict_clean():
             cookies = json.load(f)
         
         new_cookies = {}
-        target_keys = ['auth_token', 'ct0']
+        target_keys = ['auth_token', 'ct0', 'twid']
         
         if isinstance(cookies, list):
              for c in cookies:

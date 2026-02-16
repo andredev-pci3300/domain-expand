@@ -1,0 +1,30 @@
+{
+  "name": "bombando-twitter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andredev-pci3300/domain-expand.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/andredev-pci3300/domain-expand/issues"
+  },
+  "homepage": "https://github.com/andredev-pci3300/domain-expand#readme",
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "puppeteer": "^24.37.3",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
+  }
+}

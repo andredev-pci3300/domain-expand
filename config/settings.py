@@ -12,8 +12,8 @@ GOOGLE_SCRIPT_URL = os.getenv("GOOGLE_SCRIPT_URL") # Alerts and Reports
 TARGET_ACCOUNTS = ["saylor", "APompliano", "pomp", "bitcoin", "DocumentingBTC", "TuurDemeester", "Gladstein"]
 
 # Time Window (GMT-3)
-START_HOUR = 7
-END_HOUR = 244
+START_HOUR = 0
+END_HOUR = 24
 
 # Limits
 DAILY_ACTION_LIMIT_MIN = 15
