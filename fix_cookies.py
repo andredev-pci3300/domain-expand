@@ -36,7 +36,25 @@ def fix_cookies():
         
         print(f"Converted {len(cookies)} cookies to dictionary format.")
     else:
-        print("Cookies already in dictionary format or unknown structure.")
+        print("Cookies already in dictionary format or valid structure.")
+        cookie_dict = cookies
+
+    # Always generate and print Base64 if we have a dictionary
+    if 'auth_token' in cookie_dict and 'ct0' in cookie_dict:
+        import base64
+        # Save to ensure it's on disk in the correct format before encoding
+        with open(OUTPUT_PATH, 'w', encoding='utf-8') as f:
+            json.dump(cookie_dict, f, indent=4)
+            
+        with open(OUTPUT_PATH, 'rb') as f:
+            encoded = base64.b64encode(f.read()).decode('utf-8')
+            print("\n" + "="*50)
+            print("COPIE A STRING ABAIXO PARA O GITHUB SECRET 'COOKIES_JSON_BASE64':")
+            print("="*50)
+            print(encoded)
+            print("="*50 + "\n")
+    else:
+        print("❌ Error: Missing auth_token or ct0 in cookies.")
 
 if __name__ == "__main__":
     fix_cookies()
