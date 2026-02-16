@@ -24,6 +24,10 @@ class TwitterClient:
             print(f"Loading cookies from {COOKIES_PATH}...")
             self.client.load_cookies(COOKIES_PATH)
             
+            # Debug: Print loaded cookie keys to verify strictly cleaned version
+            loaded_cookies = self.client.get_cookies()
+            print(f"Loaded Cookie Keys: {list(loaded_cookies.keys())}")
+            
             # Explicitly verify headers
             cookies = self.client.get_cookies()
             if 'ct0' in cookies:
