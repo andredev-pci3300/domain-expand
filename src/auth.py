@@ -12,8 +12,8 @@ class TwitterClient:
         # Manual overrides might be breaking header consistency
         # Wrapper for Twikit Client with Proxy Support
         proxy_url = os.getenv("PROXY_URL")
-        # Fixed User-Agent to match the one used during cookie capture
-        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+        # Updated to a more modern and common User-Agent (Chrome 133)
+        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
         
         if proxy_url:
             print(f"Using Proxy: {proxy_url.split('@')[-1]}")
@@ -81,10 +81,13 @@ class TwitterClient:
             print(f"Replied to {tweet_id}")
             return True
         except Exception as e:
-            print(f"Error replying to {tweet_id}: {type(e).__name__} - {e}")
-            # If we get a KeyError 'code', it's likely a non-JSON response (Cloudflare/Error page)
-            if "'code'" in str(e):
-                print("DEBUG: Possible Cloudflare block or malformed response (KeyError 'code').")
+            error_msg = str(e)
+            print(f"Error replying to {tweet_id}: {type(e).__name__} - {error_msg}")
+            
+            # Specific handling for the 'code' KeyError which indicates a non-JSON (Cloudflare) response
+            if "'code'" in error_msg:
+                print("⚠️ CRITICAL: Cloudflare Blocked the POST request. The response was not JSON.")
+                print("💡 Recommendation: Rotate Proxy IP or check if User-Agent matches exactly your current browser.")
             return False
 
     async def create_tweet(self, text):
