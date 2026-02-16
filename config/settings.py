@@ -13,7 +13,7 @@ TARGET_ACCOUNTS = ["saylor", "APompliano", "pomp", "bitcoin", "DocumentingBTC", 
 
 # Time Window (GMT-3)
 START_HOUR = 7
-END_HOUR = 24
+END_HOUR = 244
 
 # Limits
 DAILY_ACTION_LIMIT_MIN = 15
@@ -24,7 +24,7 @@ DAILY_POST_LIMIT_MAX = 10
 # Anti-Bot
 MIN_SCROLL_DURATION = 20
 MAX_SCROLL_DURATION = 60
-PROBABILISTIC_SKIP_CHANCE = 0.0
+PROBABILISTIC_SKIP_CHANCE = 0.00
 
 # Content Mix (Probabilities)
 PROB_REPLY = 0.60
