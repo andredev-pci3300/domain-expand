@@ -40,9 +40,11 @@ jobs:
     # For independent "cron" runs, using a repo secret for cookies is best.
     
     - name: Restore Cookies
-      if: ${{ secrets.COOKIES_JSON_BASE64 }}
+      env:
+        COOKIES_BASE64: ${{ secrets.COOKIES_JSON_BASE64 }}
+      if: ${{ env.COOKIES_BASE64 != '' }}
       run: |
-        echo "${{ secrets.COOKIES_JSON_BASE64 }}" | base64 -d > data/cookies.json
+        echo "$COOKIES_BASE64" | base64 -d > data/cookies.json
 
     - name: Run Bot
       run: python main.py
