@@ -12,6 +12,7 @@ async def main():
     print("Initializing X Automation Bot...")
     notifier = NotificationManager()
     bot = BotActions()
+    await bot.initialize() # Load cookies/login before anything else
 
     # --- Initialization & Login Check ---
     try:
