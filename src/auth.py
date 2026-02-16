@@ -10,7 +10,14 @@ class TwitterClient:
     def __init__(self):
         # Reverting to Twikit's default User-Agent handling
         # Manual overrides might be breaking header consistency
-        self.client = Client(language='en-US')
+        # Wrapper for Twikit Client with Proxy Support
+        proxy_url = os.getenv("PROXY_URL")
+        if proxy_url:
+            print(f"Using Proxy: {proxy_url.split('@')[-1]}") # Log only IP:Port for security
+            self.client = Client(language='en-US', proxy=proxy_url)
+        else:
+            print("No Proxy configured. Using direct connection.")
+            self.client = Client(language='en-US')
 
     async def login(self):
         """Loads cookies if available, otherwise expects environment variables for login."""
