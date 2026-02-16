@@ -12,12 +12,15 @@ class TwitterClient:
         # Manual overrides might be breaking header consistency
         # Wrapper for Twikit Client with Proxy Support
         proxy_url = os.getenv("PROXY_URL")
+        # Fixed User-Agent to match the one used during cookie capture
+        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+        
         if proxy_url:
-            print(f"Using Proxy: {proxy_url.split('@')[-1]}") # Log only IP:Port for security
-            self.client = Client(language='en-US', proxy=proxy_url)
+            print(f"Using Proxy: {proxy_url.split('@')[-1]}")
+            self.client = Client(language='en-US', proxy=proxy_url, user_agent=user_agent)
         else:
             print("No Proxy configured. Using direct connection.")
-            self.client = Client(language='en-US')
+            self.client = Client(language='en-US', user_agent=user_agent)
 
     async def login(self):
         """Loads cookies if available, otherwise expects environment variables for login."""
@@ -78,7 +81,10 @@ class TwitterClient:
             print(f"Replied to {tweet_id}")
             return True
         except Exception as e:
-            print(f"Error replying to {tweet_id}: {e}")
+            print(f"Error replying to {tweet_id}: {type(e).__name__} - {e}")
+            # If we get a KeyError 'code', it's likely a non-JSON response (Cloudflare/Error page)
+            if "'code'" in str(e):
+                print("DEBUG: Possible Cloudflare block or malformed response (KeyError 'code').")
             return False
 
     async def create_tweet(self, text):
@@ -94,7 +100,17 @@ class TwitterClient:
     async def get_my_metrics(self):
         """Fetches current user metrics."""
         try:
-            user = await self.client.user()
+            # Fallback for metrics if client.user() fails
+            try:
+                user = await self.client.user()
+            except:
+                # Try getting own user by screen name if stored in env
+                username = os.getenv("TWITTER_USERNAME")
+                if username:
+                    user = await self.client.get_user_by_screen_name(username)
+                else:
+                    raise
+
             return {
                 "followers": user.followers_count,
                 "following": user.following_count,

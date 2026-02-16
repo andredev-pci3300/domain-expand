@@ -83,9 +83,16 @@ class BotActions:
 
         # Process candidates
         for tweet in candidates:
+            # Basic validation to avoid synthetic IDs (ads/promoted)
+            tweet_id_str = str(tweet.id)
+            if len(tweet_id_str) < 15 or tweet_id_str.startswith('2023'): # 2023... IDs are suspicious in this context
+                print(f"DEBUG: Skipping suspicious Tweet ID: {tweet.id}")
+                continue
+
             if self.cache.is_tweet_processed(tweet.id):
                 continue
             
+            print(f"DEBUG: Processing Tweet ID: {tweet.id} | User: {getattr(tweet.user, 'screen_name', 'Unknown')}")
             print(f"Replying to tweet: {tweet.text[:50]}...")
             
             # Anti-Bot Delay
